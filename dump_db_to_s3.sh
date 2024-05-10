@@ -3,8 +3,8 @@
 #
 # usage: dump_db_to_s3
 
-if [ -z "$HOSTNAME" ]; then
-  echo "Error: HOSTNAME environment variable is not set"
+if [ -z "$DB_HOSTNAME" ]; then
+  echo "Error: DB_HOSTNAME environment variable is not set"
   exit 1
 fi
 
@@ -58,12 +58,12 @@ if [ -z "$AWS_DEFAULT_REGION" ]; then
 fi
 
 cat << EOF > $PGPASSFILE
-$HOSTNAME:*:$DB_NAME:$DB_USER:$DB_PASSWORD
+$DB_HOSTNAME:*:$DB_NAME:$DB_USER:$DB_PASSWORD
 EOF
 
 export DUMP_FILE="$DUMP_FILE_LOCATION/$DUMP_FILE_PREFIX$(date +%Y%m%d%H%M%S).dump"
 
-time pg_dump -h $HOSTNAME -U $DB_USER --clean --format=c --no-owner --no-acl --no-password -f $DUMP_FILE $DB_NAME
+time pg_dump -h $DB_HOSTNAME -U $DB_USER --clean --format=c --no-owner --no-acl --no-password -f $DUMP_FILE $DB_NAME
 
 if [ -f "$DUMP_FILE" ]; then
   echo "Database dumped successfully to $DUMP_FILE"
