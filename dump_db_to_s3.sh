@@ -38,16 +38,6 @@ if [ -z "$S3_BUCKET" ]; then
   exit 1
 fi
 
-if [ -z "$TAG_KEY" ]; then
-  echo "Error: TAG_KEY environment variable is not set"
-  exit 1
-fi
-
-if [ -z "$TAG_VALUE" ]; then
-  echo "Error: TAG_VALUE environment variable is not set"
-  exit 1
-fi
-
 if [ -z "$PGPASSFILE" ]; then
   echo "Error: PGPASSFILE environment variable is not set"
   exit 1
