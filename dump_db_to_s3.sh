@@ -47,6 +47,8 @@ if [ -z "$AWS_DEFAULT_REGION" ]; then
   export AWS_DEFAULT_REGION="us-east-1"
 fi
 
+echo "Creating .pgpass file"
+
 cat << EOF > $PGPASSFILE
 $DB_HOSTNAME:*:$DB_NAME:$DB_USER:$DB_PASSWORD
 EOF
@@ -57,6 +59,8 @@ chmod 600 $PGPASSFILE
 
 export DUMP_FILE="$DUMP_FILE_LOCATION/$DUMP_FILE_PREFIX$(date +%Y%m%d%H%M%S).dump"
 
+echo "Dumping database to: $DUMP_FILE"
+
 time pg_dump -h $DB_HOSTNAME -U $DB_USER --clean --format=c --no-owner --no-acl --no-password -f $DUMP_FILE $DB_NAME
 
 if [ -f "$DUMP_FILE" ]; then
@@ -65,6 +69,8 @@ else
   echo "Error: Failed to dump the database"
   exit 1
 fi
+
+echo "Uploading database to: s3://$S3_BUCKET/$(basename "$DUMP_FILE")"
 
 aws s3 cp "$DUMP_FILE" "s3://$S3_BUCKET/$(basename "$DUMP_FILE")"
 
