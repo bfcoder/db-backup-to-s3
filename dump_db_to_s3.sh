@@ -38,8 +38,8 @@ if [ -z "$S3_BUCKET" ]; then
   exit 1
 fi
 
-if [ -z "$PGPASSFILE" ]; then
-  echo "Error: PGPASSFILE environment variable is not set"
+if [ -z "$PGPASSFILE_LOCATION" ]; then
+  echo "Error: PGPASSFILE_LOCATION environment variable is not set"
   exit 1
 fi
 
@@ -48,6 +48,8 @@ if [ -z "$AWS_DEFAULT_REGION" ]; then
 fi
 
 echo "Creating .pgpass file"
+
+export PGPASSFILE="$PGPASSFILE_LOCATION/.pgpass"
 
 cat << EOF > $PGPASSFILE
 $DB_HOSTNAME:*:$DB_NAME:$DB_USER:$DB_PASSWORD
