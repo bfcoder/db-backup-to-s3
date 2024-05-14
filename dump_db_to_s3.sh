@@ -95,4 +95,8 @@ fi
 
 rm "$DUMP_FILE"
 
+if [ -n "$HEARTBEAT_URL" ]; then
+  wget --spider "$HEARTBEAT_URL"
+fi
+
 echo "Script execution completed"
